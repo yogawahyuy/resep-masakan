@@ -5,7 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.JsonObject
 import com.snystudio.resepmasakanharian.R
+import com.snystudio.resepmasakanharian.config.ApiConfig
+import com.snystudio.resepmasakanharian.model.RecipesModel
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,18 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+    private lateinit var menuSugestArrayList: ArrayList<RecipesModel>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,24 +35,36 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+    fun dataSliderMenuSugest(){
+        getMenuSugest()
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    }
+    fun getMenuSugest(){
+        val result: Call<JsonObject> = ApiConfig.getApiService().getRecipes()
+        result.enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>?, response: Response<JsonObject>?) {
+                try {
+                    val root: JSONObject = JSONObject(response?.body().toString())
+                    val data: JSONArray =root.getJSONArray("results")
+                    for (i in 0 until data.length()){
+
+                        val recipe: JSONObject =data.getJSONObject(i)
+                        val recipesModel= RecipesModel(recipe.getString("title"),recipe.getString("thumb"),
+                            recipe.getString("key"),recipe.getString("times"),recipe.getString("portion"),recipe.getString("dificulty"))
+                        menuSugestArrayList.add(recipesModel)
+                    }
+                }catch (e: JSONException){
+                    e.printStackTrace()
                 }
             }
+
+            override fun onFailure(call: Call<JsonObject>?, t: Throwable?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
     }
+
 }

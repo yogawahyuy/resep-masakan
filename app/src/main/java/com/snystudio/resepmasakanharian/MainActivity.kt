@@ -4,13 +4,24 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.JsonObject
 import com.snystudio.resepmasakanharian.adapter.PageAdapter
+import com.snystudio.resepmasakanharian.config.ApiConfig
 import com.snystudio.resepmasakanharian.fragment.AccountFragment
 import com.snystudio.resepmasakanharian.fragment.CategoryFragment
 import com.snystudio.resepmasakanharian.fragment.HomeFragment
 import com.snystudio.resepmasakanharian.fragment.SaveRecipeFragment
+import com.snystudio.resepmasakanharian.model.RecipesModel
+import com.synnapps.carouselview.ViewListener
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
 
     fun initComponent(){
         val viewPager:ViewPager=findViewById(R.id.main_viewpager)
@@ -42,9 +53,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initComponent()
     }
+
+
 }
