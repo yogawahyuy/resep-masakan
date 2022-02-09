@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/menu/bottom_navigation_view_menu.xml" value="0.18796296296296297" />
         <entry key="..\:/ProjectAndroidTerbaru/ResepMasakanHarian/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
         <entry key="..\:/ProjectAndroidTerbaru/ResepMasakanHarian/app/src/main/res/menu/bottom_navigation_view_menu.xml" value="0.36666666666666664" />
       </map>
