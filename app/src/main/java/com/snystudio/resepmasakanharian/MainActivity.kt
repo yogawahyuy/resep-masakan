@@ -2,62 +2,62 @@ package com.snystudio.resepmasakanharian
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+import android.widget.FrameLayout
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.JsonObject
 import com.snystudio.resepmasakanharian.adapter.PageAdapter
-import com.snystudio.resepmasakanharian.config.ApiConfig
 import com.snystudio.resepmasakanharian.fragment.AccountFragment
 import com.snystudio.resepmasakanharian.fragment.CategoryFragment
 import com.snystudio.resepmasakanharian.fragment.HomeFragment
 import com.snystudio.resepmasakanharian.fragment.SaveRecipeFragment
-import com.snystudio.resepmasakanharian.model.RecipesModel
-import com.synnapps.carouselview.ViewListener
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
 
-    fun initComponent(){
-        val viewPager:ViewPager=findViewById(R.id.main_viewpager)
-        val pageAdapter : PageAdapter= PageAdapter(supportFragmentManager)
-        pageAdapter.addFragments(HomeFragment())
-        pageAdapter.addFragments(CategoryFragment())
-        pageAdapter.addFragments(SaveRecipeFragment())
-        pageAdapter.addFragments(AccountFragment())
-        viewPager.adapter=pageAdapter
-
-        val bottomNavigationView:BottomNavigationView=findViewById(R.id.bottom_navigation)
-        bottomNavigationView.setOnNavigationItemSelectedListener {
-            when(it.itemId){
-                R.id.home_menu->{
-                    viewPager.currentItem=0
-                    true
-                }
-                R.id.kategori_menu->{
-                    viewPager.currentItem=1
-                    true
-                }R.id.save_recipe_menu->{
-                    viewPager.currentItem=2
-                true
-                }R.id.account_menu->{
-                    viewPager.currentItem=3
-                true
-                }else->false
+    private val mOnNavigationListener=BottomNavigationView.OnNavigationItemSelectedListener{
+        when(it.itemId) {
+            R.id.home_menu -> {
+              val fragment=HomeFragment()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
             }
+            R.id.kategori_menu -> {
+                val fragment=CategoryFragment()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.save_recipe_menu -> {
+                val fragment=SaveRecipeFragment()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.account_menu -> {
+                val fragment=AccountFragment()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+
         }
-
+        false
     }
-
+    private fun addFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out)
+            .replace(R.id.contents, fragment, fragment.javaClass.getSimpleName())
+            .commit()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initComponent()
+        bottom_navigation.setOnNavigationItemSelectedListener(mOnNavigationListener)
+        val fragment=HomeFragment()
+        addFragment(fragment)
     }
 
 

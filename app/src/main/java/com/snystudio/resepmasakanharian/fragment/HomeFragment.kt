@@ -1,14 +1,24 @@
 package com.snystudio.resepmasakanharian.fragment
 
+import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import com.snystudio.resepmasakanharian.R
 import com.snystudio.resepmasakanharian.config.ApiConfig
 import com.snystudio.resepmasakanharian.model.RecipesModel
+import com.squareup.picasso.Picasso
+import com.synnapps.carouselview.CarouselView
+import com.synnapps.carouselview.ImageListener
+import com.synnapps.carouselview.ViewListener
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -27,16 +37,51 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    private lateinit var menuSugestArrayList: ArrayList<RecipesModel>
+    var menuSugestArrayList= ArrayList<RecipesModel>()
+    private lateinit var viewOfLayout:View
+    private lateinit var carouselView:CarouselView
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        viewOfLayout= inflater.inflate(R.layout.fragment_home, container, false)
+        getMenuSugest()
+        return viewOfLayout
+    }
+
+    override fun onResume() {
+        dataSliderMenuSugest()
+        super.onResume()
     }
     fun dataSliderMenuSugest(){
-        getMenuSugest()
+        carouselView=viewOfLayout.findViewById(R.id.slider)
+        carouselView.setViewListener(viewListener)
+        carouselView.pageCount=menuSugestArrayList.size
+    }
+    var viewListener:ViewListener = object :ViewListener{
+        override fun setViewForPosition(position: Int): View {
+            val customViewListener:View= activity?.layoutInflater!!.inflate(R.layout.view_listener_menu_sugest,null)
+            val imageView=customViewListener.findViewById(R.id.menu_sugest_home) as ImageView
+            val textView=customViewListener.findViewById(R.id.title_menu_sugest_home) as TextView
+            val relativeLayout=customViewListener.findViewById(R.id.rel_menu_sugest) as RelativeLayout
+            textView.text=menuSugestArrayList.get(position).title
+            relativeLayout.bringToFront()
+            Picasso.get().load(menuSugestArrayList.get(position).thumbs).into(imageView)
+            return customViewListener
+        }
 
     }
     fun getMenuSugest(){
@@ -52,7 +97,10 @@ class HomeFragment : Fragment() {
                         val recipesModel= RecipesModel(recipe.getString("title"),recipe.getString("thumb"),
                             recipe.getString("key"),recipe.getString("times"),recipe.getString("portion"),recipe.getString("dificulty"))
                         menuSugestArrayList.add(recipesModel)
+
                     }
+                    Log.d("Home Fragments", "setImageForPosition: "+menuSugestArrayList.size)
+                    dataSliderMenuSugest()
                 }catch (e: JSONException){
                     e.printStackTrace()
                 }
