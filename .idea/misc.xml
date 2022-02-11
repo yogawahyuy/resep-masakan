@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/fragment_account.xml" value="0.17074275362318841" />
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/fragment_category.xml" value="0.17074275362318841" />
         <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/fragment_save_recipe.xml" value="0.17074275362318841" />
         <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/layout/view_listener_menu_sugest.xml" value="0.18" />
         <entry key="..\:/ProjectAndroid/resep-masakan/app/src/main/res/menu/bottom_navigation_view_menu.xml" value="0.18796296296296297" />
         <entry key="..\:/ProjectAndroidTerbaru/ResepMasakanHarian/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />

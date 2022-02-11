@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="recipeModel"
+            type="com.snystudio.resepmasakanharian.model.RecipesModel" />
+    </data>
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
@@ -14,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Menunya"
+            android:text="@={recipeModel.title}"
             android:textSize="20sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginStart="8dp"
@@ -32,3 +41,4 @@
 
 
 </RelativeLayout>
+</layout>

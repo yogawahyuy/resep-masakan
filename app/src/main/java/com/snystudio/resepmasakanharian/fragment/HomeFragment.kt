@@ -10,10 +10,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import com.snystudio.resepmasakanharian.R
 import com.snystudio.resepmasakanharian.config.ApiConfig
+import com.snystudio.resepmasakanharian.databinding.FragmentHomeBinding
 import com.snystudio.resepmasakanharian.model.RecipesModel
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
@@ -38,8 +40,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class HomeFragment : Fragment() {
     var menuSugestArrayList= ArrayList<RecipesModel>()
-    private lateinit var viewOfLayout:View
-    private lateinit var carouselView:CarouselView
+
+    private lateinit var binding : FragmentHomeBinding
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -55,11 +57,10 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-
-        viewOfLayout= inflater.inflate(R.layout.fragment_home, container, false)
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_home,container,false)
+        binding.homefragment=this
         getMenuSugest()
-        return viewOfLayout
+        return binding.root
     }
 
     override fun onResume() {
@@ -67,22 +68,19 @@ class HomeFragment : Fragment() {
         super.onResume()
     }
     fun dataSliderMenuSugest(){
-        carouselView=viewOfLayout.findViewById(R.id.slider)
-        carouselView.setViewListener(viewListener)
-        carouselView.pageCount=menuSugestArrayList.size
-    }
-    var viewListener:ViewListener = object :ViewListener{
-        override fun setViewForPosition(position: Int): View {
-            val customViewListener:View= activity?.layoutInflater!!.inflate(R.layout.view_listener_menu_sugest,null)
-            val imageView=customViewListener.findViewById(R.id.menu_sugest_home) as ImageView
-            val textView=customViewListener.findViewById(R.id.title_menu_sugest_home) as TextView
-            val relativeLayout=customViewListener.findViewById(R.id.rel_menu_sugest) as RelativeLayout
-            textView.text=menuSugestArrayList.get(position).title
-            relativeLayout.bringToFront()
-            Picasso.get().load(menuSugestArrayList.get(position).thumbs).into(imageView)
-            return customViewListener
-        }
+        binding.slider.setViewListener(viewListener)
+        binding.slider.pageCount=menuSugestArrayList.size
 
+    }
+    private var viewListener:ViewListener = ViewListener {
+        val customViewListener:View= activity?.layoutInflater!!.inflate(R.layout.view_listener_menu_sugest,null)
+        val imageView=customViewListener.findViewById(R.id.menu_sugest_home) as ImageView
+        val textView=customViewListener.findViewById(R.id.title_menu_sugest_home) as TextView
+        val relativeLayout=customViewListener.findViewById(R.id.rel_menu_sugest) as RelativeLayout
+        textView.text=menuSugestArrayList.get(it).title
+        relativeLayout.bringToFront()
+        Picasso.get().load(menuSugestArrayList.get(it).thumbs).into(imageView)
+        return@ViewListener customViewListener
     }
     fun getMenuSugest(){
         val result: Call<JsonObject> = ApiConfig.getApiService().getRecipes()
